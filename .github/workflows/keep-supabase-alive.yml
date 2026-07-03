@@ -12,6 +12,6 @@ jobs:
       - name: Ping Supabase REST API
         run: |
           status=$(curl -s -o /dev/null -w "%{http_code}" \
-            "<PROJECT_URL>/rest/v1/" \
+            "https://goufoedhjkvhbjahzfvq.supabase.co/rest/v1//rest/v1/" \
             -H "apikey: sb_publishable_G8BY4OsEsXcTlhA76WBUPQ_zRwLloNB")
           echo "Supabase responded with HTTP $status"
