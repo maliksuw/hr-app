@@ -2,7 +2,7 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    - cron: "0 3 * * 1,4"
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 jobs:
@@ -11,7 +11,17 @@ jobs:
     steps:
       - name: Ping Supabase REST API
         run: |
+          # แก้ URL โดยใส่ชื่อ Table ที่มีอยู่ใน Database (เช่น /rest/v1/your_table_name?select=id&limit=1)
           status=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://goufoedhjkvhbjahzfvq.supabase.co/rest/v1//rest/v1/" \
-            -H "apikey: sb_publishable_G8BY4OsEsXcTlhA76WBUPQ_zRwLloNB")
+            "https://goufoedhjkvhblahzfvq.supabase.co/rest/v1/HR-app?select=id&limit=1" \
+            -H "apikey: sb_publishable_G8BY4OsEsXcTlha76wBUPQ_zRwLloNB" \
+            -H "Authorization: Bearer sb_publishable_G8BY4OsEsXcTlha76wBUPQ_zRwLloNB")
+          
           echo "Supabase responded with HTTP $status"
+          
+          # ถ้าไม่ได้ HTTP 200 ให้สั่ง Workflow ให้ Fail (ขึ้นแดง) จะได้รู้ทันที
+          if [ "$status" -ne 200 ]; then
+            echo "Error: Request failed with status $status"
+            exit 1
+          fi
+          
